@@ -11,3 +11,6 @@ Route::prefix('auth')
         Route::post('refresh','refresh');
         Route::post('me','me');
 });
+
+Route::apiResource('space', \App\Http\Controllers\SpaceController::class)
+    ->middleware('auth:api');
