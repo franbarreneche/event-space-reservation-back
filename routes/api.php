@@ -14,3 +14,6 @@ Route::prefix('auth')
 
 Route::apiResource('space', \App\Http\Controllers\SpaceController::class)
     ->middleware('auth:api');
+
+Route::apiResource('reservation', \App\Http\Controllers\ReservationController::class)
+    ->middleware('auth:api');
