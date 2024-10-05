@@ -6,6 +6,7 @@ use App\Http\Requests\ReservationRequest;
 use App\Http\Resources\ReservationResource;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ReservationController extends Controller
 {
@@ -14,6 +15,8 @@ class ReservationController extends Controller
      */
     public function index(Request $request)
     {
+        Gate::authorize('viewAny', Reservation::class);
+
         return ReservationResource::make(
             $request->user()->reservations
         );
@@ -24,6 +27,8 @@ class ReservationController extends Controller
      */
     public function store(ReservationRequest $request)
     {
+        Gate::authorize('create', Reservation::class);
+
         $validated = $request->validated();
 
         $reservation = Reservation::query()->create([
@@ -39,6 +44,8 @@ class ReservationController extends Controller
      */
     public function show(Reservation $reservation)
     {
+        Gate::authorize('view', $reservation);
+
         return ReservationResource::make($reservation);
     }
 
@@ -47,6 +54,8 @@ class ReservationController extends Controller
      */
     public function update(ReservationRequest $request, Reservation $reservation)
     {
+        Gate::authorize('update', $reservation);
+
         $validated = $request->validated();
 
         $reservation->update([
@@ -61,6 +70,8 @@ class ReservationController extends Controller
      */
     public function destroy(Reservation $reservation)
     {
+        Gate::authorize('delete', $reservation);
+
         $reservation->delete();
 
         return response()->json(null, 200);
