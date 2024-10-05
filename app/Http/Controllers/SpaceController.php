@@ -6,6 +6,7 @@ use App\Http\Requests\SpaceRequest;
 use App\Http\Resources\SpaceResource;
 use App\Models\Space;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 
 class SpaceController extends Controller
@@ -15,6 +16,8 @@ class SpaceController extends Controller
      */
     public function index()
     {
+        Gate::authorize('viewAny', Space::class);
+
         return SpaceResource::collection(
             Space::all()
         );
@@ -25,6 +28,8 @@ class SpaceController extends Controller
      */
     public function store(SpaceRequest $request)
     {
+        Gate::authorize('create', Space::class);
+
         $validated = $request->validated();
 
         $space = Space::query()->create($validated);
@@ -48,6 +53,8 @@ class SpaceController extends Controller
      */
     public function show(Space $space)
     {
+        Gate::authorize('view', $space);
+
         return SpaceResource::make($space);
     }
 
@@ -56,6 +63,8 @@ class SpaceController extends Controller
      */
     public function update(SpaceRequest $request, Space $space)
     {
+        Gate::authorize('update', $space);
+
         $validated = $request->validated();
 
         $space->update($validated);
@@ -79,6 +88,8 @@ class SpaceController extends Controller
      */
     public function destroy(Space $space)
     {
+        Gate::authorize('delete', $space);
+
         $space->delete();
 
         return response()->json(null, 200);

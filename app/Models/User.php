@@ -77,6 +77,11 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    public function isAdmin(): bool
+    {
+        return $this->is_admin;
+    }
+
     public function reservations(): HasMany
     {
         return $this->hasMany(Reservation::class);
